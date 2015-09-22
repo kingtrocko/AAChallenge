@@ -47,7 +47,7 @@ var isVowel = function(character)
 var shiftVowels = function(word){
 	var arr = word.split(''); 
 	var newArr = word.split('');
-	var pos = new Array();
+	var pos = [];
 
 	for(var i=0; i<arr.length; i++){
 		if (isVowel(arr[i])){
