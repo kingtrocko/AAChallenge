@@ -2,46 +2,56 @@ var Buffer = require('buffer/').Buffer;
 var Hypher = require('hypher'),
     english = require('hyphenation.en-us'),
     h = new Hypher(english);
+var utils 	= require('./utils');
 
-var fiboNumbers = fibo(100);
+var fiboNumbers = utils.fibo(500);
+var fibIndex;
 
-exports.thor = function(words_array, startingFibNumber){
+exports.execute = function(words_array, startingFibNumber){
 
-	var array = words_array; //hyphenateCompoundWords(words_array);
-	//array.sort();
+	var concatenatedStr = "";
+	var encodedData = "";
+
+	var array = hyphenateCompoundWords(words_array);
+	
+	//step #2
+	array.sort(function (a, b) {
+    	return a.toLowerCase().localeCompare(b.toLowerCase());
+	});
+
+	fibIndex = fiboNumbers.indexOf(startingFibNumber);
 
 	for (var i = 0; i < array.length; i++) {
 		var str = alternateConsonantsSize(array[i]);
 		array[i] = str;
+
+		//step #4
+		var s = replaceVowelsWithFibNumber(array[i]);
+		array[i] = s;
 	};
-	
-	return array.join(',');
+
+	concatenatedStr = array.join('*');
+	encodedData = new Buffer(concatenatedStr).toString('base64');
+	return encodedData;
 }
 
-var replaceVowelsWithFibNumber = function(word, fibNumber){
+var replaceVowelsWithFibNumber = function(word){
 	var wordArr = word.split('');
 	var letter;
-	var startingIndex = fiboNumbers.indexOf(fibNumber);
-	var lastIndexUsed;
 
 	for (var i = 0; i < wordArr.length; i++) {
 		letter = wordArr[i];
 		
-		if(isVowel(letter)){
-			wordArr[i] = fiboNumbers[startingIndex + i];
-			lastIndexUsed = startingIndex + i;
+		if(utils.isVowel(letter)){
+			if (fibIndex < fiboNumbers.length) {
+				wordArr[i] = fiboNumbers[fibIndex].toString();
+				fibIndex++;
+			};
 		}
 	}
 	return wordArr.join('');	
 }	
 
-var fibo = function(n) {
-  var f = [];
-  for (var c = 0; c < n; ++c) {
-    f.push((c < 2) ? c : f[c-1] + f[c-2]);
-  }
-  return f;
-}
 
 var hyphenateCompoundWords = function(array)
 {
@@ -63,23 +73,6 @@ var hyphenateCompoundWords = function(array)
 	return newArr;
 }
 
-var isVowel = function(character)
-{
-	if (character == undefined)
-		return false;
-
-	var vowels = new Array('a', 'e', 'i', 'o', 'u', 'y');
-	var isVowel = false;
-	for(v in vowels)
-	{
-		if(vowels[v] == character.toLowerCase())
-		{
-			isVowel = true;
-			break;
-		}
-	}
-	return isVowel;
-}
 
 var alternateConsonantsSize = function(word){
 	var arr = word.split(''); // [D,o,G,s]
@@ -89,7 +82,7 @@ var alternateConsonantsSize = function(word){
 	for (var i = 0; i < arr.length; i++) {
 		letter = arr[i];
 
-		if(!isVowel(letter)){
+		if(!utils.isVowel(letter)){
 			if(i == 0){
 				arr[i] = letter.toUpperCase();
 				value = "upper";

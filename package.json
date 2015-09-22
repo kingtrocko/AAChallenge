@@ -14,6 +14,8 @@
     "hyphenation.en-us": "^0.2.1",
     "hypher": "^0.2.3",
     "jade": "~1.9.2",
-    "morgan": "~1.5.3"
+    "morgan": "~1.5.3",
+    "node-uuid": "^1.4.3",
+    "request": "^2.63.0"
   }
 }
