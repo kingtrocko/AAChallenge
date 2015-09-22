@@ -46,13 +46,15 @@ var replaceVowelsWithFibNumber = function(word){
 			if (fibIndex < fiboNumbers.length) {
 				wordArr[i] = fiboNumbers[fibIndex].toString();
 				fibIndex++;
-			};
+			}else{
+				wordArr[i] = "aaaaBaaaa";
+			}
 		}
 	}
 	return wordArr.join('');	
 }	
 
-
+//Not working so well because it also splits words that aren't compounds. i.e: com-pu-ter
 var hyphenateCompoundWords = function(array)
 {
 	var newArr = []
