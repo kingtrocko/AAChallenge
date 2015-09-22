@@ -26,7 +26,7 @@ router.get('/secret', function(req, res, next) {
 router.post('/my-webhook', function(req, res){
 	console.log(req.body);
 
-	my_json['secret'] = req.body.secret ;
+	my_json['secret'] = req.body.secret;
 	
 	res.writeHead(302, {
   		'Location': '/secret'
