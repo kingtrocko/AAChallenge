@@ -16,7 +16,16 @@ var my_json = {
 	};
 
 router.get('/', function(req, res, next) {
-  	res.send('This is A/A Developer Challenge ');
+	var html = '';
+	html += '<h2>This is A/A Developer Challenge</h2> <br /><br />';
+  	html += 'Available routes:<br />';
+	html += '<ul>';
+	html += '<li>GET /secret</li>';
+	html += '<li>POST /my-webhook</li>';
+	html += '<li>GET /challenge-step1</li>';
+	html += '</ul>';
+
+  	res.send(html);
 });
 
 router.get('/secret', function(req, res, next) {
