@@ -1,38 +1,50 @@
-var Buffer = require('buffer/').Buffer;
-var Hypher = require('hypher'),
-    english = require('hyphenation.en-us'),
-    h = new Hypher(english);
-var utils 	= require('./utils');
+var Buffer 			= require('buffer/').Buffer;
+var utils 			= require('./utils');
+var WordSeparator	= require('./wordseparator.js');
 
-var fiboNumbers = utils.fibo(500);
-var fibIndex;
+var value = '';
+
+var a = 0,
+	b = 1;
+var nextVal;
 
 exports.execute = function(words_array, startingFibNumber){
 
 	var concatenatedStr = "";
 	var encodedData = "";
+	value = '';
 
-	var array = hyphenateCompoundWords(words_array);
+	var wordSeparator = new WordSeparator();
+
+	var array = wordSeparator.SeparateWord(words_array);
 	
 	//step #2
-	array.sort(function (a, b) {
-    	return a.toLowerCase().localeCompare(b.toLowerCase());
-	});
+	array.sort(utils.alphabetically);
 
-	fibIndex = fiboNumbers.indexOf(startingFibNumber);
+	var str, s, isFirtsWord;
+	a = 0;
+	b = 1;
+	do {
+        nextVal = getNextFibonacciNumber();
+    } while (nextVal !== startingFibNumber);
 
 	for (var i = 0; i < array.length; i++) {
-		var str = alternateConsonantsSize(array[i]);
+		
+		isFirtsWord = i == 0 ? true : false;
+
+		str = alternateConsonantsSize(array[i], isFirtsWord);
 		array[i] = str;
 
 		//step #4
-		var s = replaceVowelsWithFibNumber(array[i]);
+		s = replaceVowelsWithFibNumber(array[i]);
 		array[i] = s;
 	};
 
 	concatenatedStr = array.join('*');
 	encodedData = new Buffer(concatenatedStr).toString('base64');
 	return encodedData;
+
+	//return array.join();
 }
 
 var replaceVowelsWithFibNumber = function(word){
@@ -43,59 +55,44 @@ var replaceVowelsWithFibNumber = function(word){
 		letter = wordArr[i];
 		
 		if(utils.isVowel(letter)){
-			if (fibIndex < fiboNumbers.length) {
-				wordArr[i] = fiboNumbers[fibIndex].toString();
-				fibIndex++;
-			}else{
-				wordArr[i] = "aaaaBaaaa";
-			}
+			wordArr[i] = nextVal;
+			nextVal = getNextFibonacciNumber();
 		}
 	}
 	return wordArr.join('');	
-}	
-
-//Not working so well because it also splits words that aren't compounds. i.e: com-pu-ter
-var hyphenateCompoundWords = function(array)
-{
-	var newArr = []
-	var wordArr = [];
-
-	for (var i = 0; i < array.length; i++) {
-		wordArr = h.hyphenate(array[i]);
-
-		if(wordArr.length > 1){
-			for(var x=0; x<wordArr.length; x++){
-				newArr.push(wordArr[x]);
-			}
-		}
-		else{
-			newArr.push(array[i]);
-		}
-	};
-	return newArr;
 }
 
+var getNextFibonacciNumber = function(){
+	b += a;
+	a = b-a;
+	return a;
+}
 
-var alternateConsonantsSize = function(word){
+var alternateConsonantsSize = function(word, isFirtsWord){
 	var arr = word.split(''); // [D,o,G,s]
 	var letter;
-	var value = '';
+
+	//bIrD, aShUpH
 
 	for (var i = 0; i < arr.length; i++) {
 		letter = arr[i];
 
+		if(isFirtsWord && i==0){
+			if(letter == letter.toLowerCase()){
+				value = 'lower';
+			}
+			if (letter == letter.toUpperCase()){
+				value = 'upper';
+			}
+		}
+
 		if(!utils.isVowel(letter)){
-			if(i == 0){
-				arr[i] = letter.toUpperCase();
-				value = "upper";
+			if(value == 'lower'){
+				arr[i] = letter.toLowerCase();
+				value = 'upper';
 			}else{
-				if(value == "upper"){
-					arr[i] = letter.toLowerCase();
-					value = "lower";
-				}else{
-					arr[i] = letter.toUpperCase();
-					value = "upper";
-				}
+				arr[i] = letter.toUpperCase();
+				value = 'lower';
 			}
 		}
 	}

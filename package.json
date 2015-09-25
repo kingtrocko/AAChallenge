@@ -13,9 +13,8 @@
     "debug": "~2.2.0",
     "ejs": "^2.3.4",
     "express": "~4.12.4",
-    "hyphenation.en-us": "^0.2.1",
-    "hypher": "^0.2.3",
     "jade": "~1.9.2",
+    "mongoose": "^4.1.8",
     "morgan": "~1.5.3",
     "node-uuid": "^1.4.3",
     "request": "^2.63.0"

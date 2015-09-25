@@ -5,16 +5,24 @@
 </head>
 <body>
 
-<h3>This is my webhook</h3>
+<h3>This are my secrets from A/A Challenge</h3>
 
-<ul>
+<div>
+	<span>Name: Nahum Fabian Huezo</span>
+	<span>Email: nahum_fabian13@hotmail.com</span>
+</div>
+
+<br /><br /><br />
+
+<table>
+	<thead>
+		<td>Secret</td>
+	</thead>
 	<% for(var i=0; i< data.length; i++){ %>
-		<li> <b>THE SECRET: </b>  data[i].secret </li>
-		<li> <b>My Name: </b> data[i].name </li> 
-		<li> <b>Profession: </b> data[i].role </li>
-		<li> <b>My LinkedIn profile: </b> data[i].linkedin </li>
-		<li> <b>My Git profile: </b> data[i].git </li>
+		<tr>
+			<td>data[i].secret_phrase</td>
+		</tr>
 	<% } %>
-</ul>
+</table>
 </body>
 </html>

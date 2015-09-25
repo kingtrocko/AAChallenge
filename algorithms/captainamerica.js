@@ -1,7 +1,8 @@
 var utils 	= require('./utils');
 
-var fiboNumbers = utils.fibo(500);
-var fibIndex;
+var a = 0,
+	b = 1;
+var nextVal;
 
 exports.execute = function(words_array, startingFibNumber){
 	var array = words_array;
@@ -14,12 +15,13 @@ exports.execute = function(words_array, startingFibNumber){
 	}
 
 	//Step 2
-	array.sort(function (a, b) {
-    	return a.toLowerCase().localeCompare(b.toLowerCase());
-	});
-	array.reverse();
+	array.sort(utils.sortInReverse);
 
-	fibIndex = fiboNumbers.indexOf(startingFibNumber);
+	a = 0;
+	b = 1;
+	do {
+        nextVal = getNextFibonacciNumber();
+    } while (nextVal !== startingFibNumber);
 
 	//Step 3
 	for (var i = 0; i < array.length; i++) {
@@ -36,6 +38,12 @@ exports.execute = function(words_array, startingFibNumber){
 	return encodedStr;
 }
 
+var getNextFibonacciNumber = function(){
+	b += a;
+	a = b-a;
+	return a;
+}
+
 var replaceVowelsWithFibNumber = function(word){
 	var wordArr = word.split('');
 	var letter;
@@ -44,12 +52,8 @@ var replaceVowelsWithFibNumber = function(word){
 		letter = wordArr[i];
 		
 		if(utils.isVowel(letter)){
-			if (fibIndex < fiboNumbers.length) {
-				wordArr[i] = fiboNumbers[fibIndex].toString();
-				fibIndex++;
-			}else{
-				wordArr[i] = "aaaaBaaaa";
-			}
+			wordArr[i] = nextVal;
+			nextVal = getNextFibonacciNumber();
 		}
 	}
 	return wordArr.join('');	

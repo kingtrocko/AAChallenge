@@ -12,10 +12,7 @@ exports.execute= function(words_array){
 		array[i] = utils.shiftVowels(array[i]);
 	}
 
-	array.sort(function (a, b) {
-    	return a.toLowerCase().localeCompare(b.toLowerCase());
-	});
-	array.reverse();
+	array.sort(utils.sortInReverse);
 	
 	concatenatedStr = array.join('*');
 	encodedStr = new Buffer(concatenatedStr).toString('base64');

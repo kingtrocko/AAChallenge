@@ -6,9 +6,7 @@ var utils 	= require('./utils');
 exports.execute = function(words_array){
 	var array = words_array;
 	
-	array.sort(function (a, b) {
-    	return a.toLowerCase().localeCompare(b.toLowerCase());
-	});
+	array.sort(utils.alphabetically);
 
 	var concatenatedStr = "";
 	var encodedStr = ""
