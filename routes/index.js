@@ -10,10 +10,10 @@ var mongoose 			= require('mongoose');
 var endpoint = 'http://internal-devchallenge-2-dev.apphb.com';
 
 router.get('/', function(req, res, next) {
-	var User = mongoose.model('User');
+	var User = mongoose.model('Secrets');
 	User.find({}, function(error, users){
-		if(!error){
-			res.send('DB cant be read due to an error: ' error);
+		if(error){
+			res.send('DB cant be read due to an error: ' +error);
 		}else{
 			res.render('index.ejs', {data: users})
 		}
